@@ -27,5 +27,8 @@ arena_malloc(arena_t *arena, size_t size) {
 
 void
 arena_destroy(arena_t *arena) {
-
+  for(;arena != NULL; arena = arena->next) {
+    free(arena->region);
+    free(arena);
+  }
 }
