@@ -1,3 +1,3 @@
 arena
 
-A small memory allocator for bulk mallocs in c.
+A small memory allocator for bulk allocations in c.
