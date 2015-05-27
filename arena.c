@@ -1,4 +1,5 @@
 #include "arena.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 #define PAGE_SIZE 4096
@@ -21,13 +22,15 @@ arena_create() {
 void *
 arena_malloc(arena_t *arena, size_t size) {
   arena_t *last = arena;
+
   do {
-    if((arena->size - arena->current) < size){
+    if((arena->size - arena->current) > size){
       arena->current += size;
-      return arena->region + (arena->size - arena->current);
+      return arena->region + (arena->current - size);
     }
     last = arena;
   } while((arena = arena->next));
+
   size           = size > PAGE_SIZE ? size : PAGE_SIZE;
   arena_t *next  = _arena_create(size);
   last->next     = next;
@@ -37,8 +40,8 @@ arena_malloc(arena_t *arena, size_t size) {
 
 void
 arena_destroy(arena_t *arena) {
-  for(;arena != NULL; arena = arena->next) {
+  do {
     free(arena->region);
     free(arena);
-  }
+  } while((arena = arena->next));
 }

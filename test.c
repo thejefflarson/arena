@@ -7,5 +7,6 @@ main() {
   uint8_t *it = arena_malloc(arena, sizeof(uint8_t));
   *it = 7;
   printf("%i\n", *it);
+  arena_destroy(arena);
   return 0;
 }
