@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define PAGE_SIZE 4096
+#define PAGE_SIZE 4095
 
 static arena_t *
 _arena_create(size_t size) {
-  arena_t *arena = (arena_t *) calloc(1, sizeof(arena));
+  arena_t *arena = (arena_t *) calloc(1, sizeof(arena_t));
   if(!arena) return NULL;
   arena->region = (uint8_t *) calloc(size, sizeof(uint8_t));
   arena->size   = size;
-  if(!arena->region) {free(arena); return NULL; }
+  if(!arena->region) { free(arena); return NULL; }
   return arena;
 }
 
@@ -29,10 +29,10 @@ arena_malloc(arena_t *arena, size_t size) {
       return arena->region + (arena->current - size);
     }
     last = arena;
-  } while((arena = arena->next));
+  } while((arena = arena->next) != NULL);
 
-  size           = size > PAGE_SIZE ? size : PAGE_SIZE;
-  arena_t *next  = _arena_create(size);
+  size_t asize   = size > PAGE_SIZE ? size : PAGE_SIZE;
+  arena_t *next  = _arena_create(asize);
   last->next     = next;
   next->current += size;
   return next->region;
@@ -40,8 +40,11 @@ arena_malloc(arena_t *arena, size_t size) {
 
 void
 arena_destroy(arena_t *arena) {
+  arena_t *next, *last = arena;
   do {
-    free(arena->region);
-    free(arena);
-  } while((arena = arena->next));
+    next = last->next;
+    free(last->region);
+    free(last);
+    last = next;
+  } while(next != NULL);
 }

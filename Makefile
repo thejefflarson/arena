@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -Wextra -pedantic -std=c99
+CFLAGS = -O0 -g -Wall -Wextra -pedantic -std=c99
 
 test: test.c arena.c
 
