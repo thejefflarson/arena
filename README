@@ -1,3 +1,18 @@
++------+
+|* *   |
+|   *  |
+|******|
++------+
+
 arena
 
 A small memory allocator for bulk allocations in c.
+
+arena_t *
+arena_create();
+
+void *
+arena_malloc(arena_t *arena, size_t size);
+
+void
+arena_destroy(arena_t *arena)
