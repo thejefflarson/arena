@@ -3,6 +3,10 @@
 #include <stdint.h>
 #include <memory.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct arena {
   uint8_t *region;
   size_t size;
@@ -18,5 +22,9 @@ arena_malloc(arena_t *arena, size_t size);
 
 void
 arena_destroy(arena_t *arena);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
