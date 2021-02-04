@@ -24,7 +24,7 @@ arena_malloc(arena_t *arena, size_t size) {
   arena_t *last = arena;
 
   do {
-    if((arena->size - arena->current) > size){
+    if((arena->size - arena->current) >= size){
       arena->current += size;
       return arena->region + (arena->current - size);
     }
